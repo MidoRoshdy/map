@@ -62,14 +62,27 @@ class MapProvider extends ChangeNotifier {
               .map((e) => LatLng(e.latitude, e.longitude))
               .toList()),
     );
-    state.controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
-      target: LatLng(30.05844092057013, 31.222098134458065),
-      zoom: 13,
-    )));
-    final request = DirectionsRequest(
-      origin: 'New York',
-      destination: 'San Francisco',
+    state.controller.moveCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(30.05844092057013, 31.222098134458065),
+          zoom: 13,
+        ),
+      ),
     );
+
+    // distance & duration
+    state.directionsService.route(
+        DirectionsRequest(
+          origin: 'New York',
+          destination: 'San Francisco',
+        ), (response, status) {
+      if (status == DirectionsStatus.ok) {
+        response.geocodedWaypoints![0];
+      } else {
+        // do something with error response
+      }
+    });
     notifyListeners();
   }
 }
